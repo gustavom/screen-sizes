@@ -1,0 +1,247 @@
+@mixin cf-single() {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+  & {
+    *zoom: 1;
+  }
+}
+
+@mixin cf() {
+  &:before,
+  &:after {
+    @extend %clearFixPseudoElementos;
+  }
+  &:after {
+    @extend %clearBoth;
+  }
+  & {
+    @extend %zoom;
+  }
+}
+
+// vertical align
+@mixin vtal() {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+// ajuste de cores para atributo placeholder
+@mixin placeholder($color, $opacity) {
+  &::-webkit-input-placeholder {
+    color: $color;
+    opacity: $opacity;
+  }
+  &::-moz-placeholder {
+    color: $color;
+    opacity: $opacity;
+  }
+  &:-ms-input-placeholder {
+    color: $color;
+    opacity: $opacity;
+  }
+  &:-moz-placeholder {
+    color: $color;
+    opacity: $opacity;
+  }
+}
+
+// prefix
+@mixin prefix($property, $value) {
+  -webkit-#{$property}: #{$value};
+  -moz-#{$property}: #{$value};
+  -ms-#{$property}: #{$value};
+  -o-#{$property}: #{$value};
+  #{$property}: #{$value};
+}
+
+// ## Example
+// @include prefixer(�border-radius�, $value);
+//
+//## Transition
+//
+@mixin transition($value) {
+  -webkit-transition: #{$value};
+  transition: #{$value};
+}
+
+//
+//## Transform
+//
+@mixin transition($value) {
+  -webkit-transform: #{$value};
+  transform: #{$value};
+}
+
+//
+// ## Border Radius
+//
+@mixin border-radius($radius) {
+  -webkit-border-radius: #{$radius};
+  -moz-border-radius: #{$radius};
+  border-radius: #{$radius};
+}
+
+//
+// ## Animation
+//
+@mixin animation($value) {
+  -webkit-animation: #{$value};
+  animation: #{$value};
+}
+
+// /*  Keyframes
+// ========================================================================== */
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+  @-o-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+// ## Tipografia
+$open-weight: 400;
+@mixin font-open($args: $open-weight) {
+  @if ($args==$open-weight) {
+    font-family: "Open Sans", sans-serif;
+    font-weight: $args;
+  } @else {
+    font-family: "Open Sans", sans-serif;
+    font-weight: $args;
+  }
+}
+
+@mixin font-open-f($args: $open-weight) {
+  @if ($args==$open-weight) {
+    font-family: "Open Sans", sans-serif !important;
+    font-weight: $args;
+  } @else {
+    font-family: "Open Sans", sans-serif !important;
+    font-weight: $args;
+  }
+}
+
+/*
+
+    ### MEDIA QUERIES BREAKPOINTS
+
+*/
+//
+// desktop wide = dw
+$desktop-wide: 1366px;
+//
+//desktop normal = dn
+$desktop-normal: 1260px;
+//
+//tablet landscape = tw
+$tablet-wide: 990px;
+//
+//tablet portrait = tn
+$tablet-normal: 768px;
+//
+//smartphone landscape = sw
+$smartphone-wide: 650px;
+//
+//smartphone portrait = sn
+$smartphone-normal: 480px;
+
+// Media Queries
+$breakpoints_jornal: (
+  "dw": $desktop-wide,
+  "dn": $desktop-normal,
+  "tw": $tablet-wide,
+  "tn": $tablet-normal,
+  "sw": $smartphone-wide,
+  "sn": $smartphone-normal
+);
+@mixin mq($width, $type: max) {
+  @if map_has_key($breakpoints_jornal, $width) {
+    $width: map_get($breakpoints_jornal, $width); //@if $type == max {
+    //    $width: $width - 1px;
+    //}
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  } @else {
+    @media only screen and (max-width: $width) {
+      @content;
+    }
+  }
+}
+
+@mixin mqrange($breakpointsMin, $breakpointsMax) {
+  @if map_has_key($breakpoints_jornal, $breakpointsMin) {
+    $breakpointsMin: map_get($breakpoints_jornal, $breakpointsMin);
+    $breakpointsMax: map_get($breakpoints_jornal, $breakpointsMax);
+    @media only screen and (min-width: $breakpointsMin) and (max-width: $breakpointsMax) {
+      @content;
+    }
+  } @else {
+    @media only screen and (min-width: $breakpointsMin) and (max-width: $breakpointsMax) {
+      @content;
+    }
+  }
+}
+
+/*
+    Extends
+*/
+
+%displayInline {
+  display: inline;
+}
+
+%displayNone {
+  display: none;
+}
+
+%clearFixPseudoElementos {
+  content: " ";
+  display: table;
+}
+
+%clearBoth {
+  clear: both;
+}
+
+%zoom {
+  *zoom: 1;
+}
+
+%cleanUl {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+%container {
+  position: relative;
+  float: left;
+  width: 100%;
+  @include cf();
+}
+
+@mixin cols($cols) {
+  -moz-column-count: $cols;
+  -webkit-column-count: $cols;
+  column-count: $cols;
+}
